@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">The Tower of Hanoi</string>
+    <string name="moves">Moves: %1$d</string>
+</resources>
