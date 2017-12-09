@@ -9,29 +9,28 @@ import android.graphics.Rect;
  * Created by Alex on 10/11/2017.
  */
 
-public class Disk {
-    int[] colors;
-    Paint paint;
+class Disk {
+    private Paint paint;
     Rect r;
-    private static final int DISK_HEIGHT = 25;
-    private int width;
+    private int width, height;
 
-    Disk(int w, int center, int bottom, int color) {
+    Disk(int w, int h, int center, int bottom, int color) {
         width = w;
-        r = new Rect(center - w / 2, bottom - DISK_HEIGHT, center + w / 2, bottom);
+        height = h;
+        r = new Rect(center - w / 2, bottom - height, center + w / 2, bottom);
         paint = new Paint();
         paint.setColor(color);
     }
 
-    public void draw(Canvas canvas) {
+    void draw(Canvas canvas) {
         canvas.drawRect(r, paint);
     }
 
-    static public int getHeight() {
-        return DISK_HEIGHT;
+    int getHeight() {
+        return height;
     }
 
-    public int getWidth() {
+    int getWidth() {
         return width;
     }
 }
