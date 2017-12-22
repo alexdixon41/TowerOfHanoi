@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="numDiskSelection"
+        android:defaultValue="5"
+        android:summary="@string/num_disk_message"
+        android:dialogTitle="@string/num_disk_title"
+        android:entries="@array/num_disk_selections"
+        android:entryValues="@array/num_disk_values"
+        android:title="@string/num_disk_title" />
+
+
+</PreferenceScreen>

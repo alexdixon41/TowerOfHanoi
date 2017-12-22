@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">The Tower of Hanoi</string>
     <string name="moves">Moves: %1$d</string>
+
+    <string name="success_message_optimal">Perfect! You solved the puzzle in %1$d moves!</string>
+    <string name="success_message">You solved the puzzle in %1$d moves! The optimal solution for %2$d disks is %3$d moves.</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="play_again">Play Again</string>
+
+    <string name="new_game">New Game</string>
+    <string name="load_game">Load Game</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="num_disk_title">Number of Disks</string>
+    <string name="num_disk_message">Choose how many disks are in the game</string>
 </resources>

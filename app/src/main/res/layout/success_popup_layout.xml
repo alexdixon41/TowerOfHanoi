@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/success_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="#20c996"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        android:paddingBottom="3dp"
+        android:layout_marginBottom="1dp"/>
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="@string/main_menu"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:layout_marginRight="0.5dp"
+            android:layout_marginEnd="0.5dp"
+            android:background="#20c996"
+            android:onClick="mainMenu"/>
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/play_again"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="0.5dp"
+            android:layout_marginStart="0.5dp"
+            android:background="#20c996"
+            android:onClick="restart"/>
+    </LinearLayout>
+
+</LinearLayout>

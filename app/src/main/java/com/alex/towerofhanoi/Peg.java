@@ -13,11 +13,11 @@ class Peg {
     private Disk[] disks;
     private int n, center;                          //The number of disks on this Peg; the x-value for the center of the Peg;
     private int height;                             //The height of the Peg
-    private int panelHeight, panelWidth;            //The height and width of the panel Pegs are drawn in
+    private int panelHeight;                        //The height of the panel Pegs are drawn in
     private int[] colors = new int[]{Color.rgb(32, 201, 150), Color.rgb(108, 143, 208),
             Color.rgb(244, 183, 16), Color.rgb(177, 156, 217)};
     private Bitmap image;
-    Rect dst;
+    private Rect dst;
 
     /**
      * @param res          image resource for the background of the Pegs
@@ -30,11 +30,10 @@ class Peg {
         this.height = height;
         this.center = center;
         this.panelHeight = panelHeight;
-        this.panelWidth = panelWidth;
         dst = new Rect(center - panelWidth / 72, panelHeight - height, center + panelWidth / 72, panelHeight);
         n = 0;
         image = res;
-        disks = new Disk[10];
+        disks = new Disk[12];
     }
 
     /**
@@ -117,5 +116,30 @@ class Peg {
      */
     int getSize() {
         return n;
+    }
+
+    /**
+     * @return Disk[] disks - the array of disks
+     */
+    Disk[] getDisks() {
+        return disks;
+    }
+
+    /**
+     * Set the number of disks
+     * @param n  the number of disks
+     */
+    void setSize(int n) {
+        this.n = n;
+    }
+
+    /**
+     * Re-initialize the disks in the disk array
+     * @param disks  the array of disks from previous game
+     */
+    void setDisks(Disk[] disks) {
+        for (int i = 0; i < n; i++) {
+            this.disks[i] = new Disk(disks[i].getWidth(), disks[i].getHeight(), dst.centerX(), dst.bottom - panelHeight / 34 * i, disks[i].getColor());
+        }
     }
 }

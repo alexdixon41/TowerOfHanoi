@@ -10,13 +10,16 @@ import android.graphics.Rect;
  */
 
 class Disk {
-    private Paint paint;
+    private final Paint paint;
     Rect r;
-    private int width, height;
+    private int width, height, center, bottom, color;
 
     Disk(int w, int h, int center, int bottom, int color) {
         width = w;
         height = h;
+        this.center = center;
+        this.bottom = bottom;
+        this.color = color;
         r = new Rect(center - w / 2, bottom - height, center + w / 2, bottom);
         paint = new Paint();
         paint.setColor(color);
@@ -26,11 +29,15 @@ class Disk {
         canvas.drawRect(r, paint);
     }
 
+    int getWidth() {
+        return width;
+    }
+
     int getHeight() {
         return height;
     }
 
-    int getWidth() {
-        return width;
+    int getColor() {
+        return color;
     }
 }
