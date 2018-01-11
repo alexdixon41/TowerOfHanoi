@@ -1,24 +1,19 @@
 package com.alex.towerofhanoi;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-
-/**
- * Created by Alex on 10/11/2017.
- */
 
 class Disk {
     private final Paint paint;
     Rect r;
-    private int width, height, center, bottom, color;
+    private int width;
+    private int height;
+    private int color;
 
     Disk(int w, int h, int center, int bottom, int color) {
         width = w;
         height = h;
-        this.center = center;
-        this.bottom = bottom;
         this.color = color;
         r = new Rect(center - w / 2, bottom - height, center + w / 2, bottom);
         paint = new Paint();
@@ -39,5 +34,9 @@ class Disk {
 
     int getColor() {
         return color;
+    }
+
+    void resize(int bottom, int top) {
+        this.r = new Rect(r.left, top, r.right, bottom);
     }
 }

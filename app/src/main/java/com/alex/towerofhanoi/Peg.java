@@ -7,6 +7,8 @@ import android.graphics.Rect;
 
 /**
  * Created by Alex on 10/11/2017.
+ *
+ * Class to represent a peg that holds an array of disks.
  */
 
 class Peg {
@@ -14,10 +16,10 @@ class Peg {
     private int n, center;                          //The number of disks on this Peg; the x-value for the center of the Peg;
     private int height;                             //The height of the Peg
     private int panelHeight;                        //The height of the panel Pegs are drawn in
-    private int[] colors = new int[]{Color.rgb(32, 201, 150), Color.rgb(108, 143, 208),
-            Color.rgb(244, 183, 16), Color.rgb(177, 156, 217)};
+    private int[] colors;
     private Bitmap image;
     private Rect dst;
+    static final int DISK_HEIGHT_DP = 18;
 
     /**
      * @param res          image resource for the background of the Pegs
@@ -34,6 +36,9 @@ class Peg {
         n = 0;
         image = res;
         disks = new Disk[12];
+        colors = new int[GameActivity.getNumChosenDiskColors()];
+        for (int i = 0; i < colors.length; i++)
+            colors[i] = Color.parseColor(GameActivity.getChosenDiskColors()[i]);
     }
 
     /**
@@ -42,11 +47,11 @@ class Peg {
      * @param numDisks      how many disks to initially create
      * @param maxDiskSize   the size of the largest Disk
      */
-    void populateDisks(int numDisks, int maxDiskSize) {
+    void populateDisks(int numDisks, int maxDiskSize, int spacing) {
         n = numDisks;
-        int spacing = (maxDiskSize - panelHeight / 20) / (n - 1);                  //How much to decrease width for each new disk
         for (int i = 0; i < n; i++) {
-            disks[i] = new Disk(maxDiskSize - spacing * i, panelHeight / 34, dst.centerX(), dst.bottom - panelHeight / 34 * i, colors[i % colors.length]);
+            disks[i] = new Disk(maxDiskSize - spacing * i, GamePanel.dpToPx(DISK_HEIGHT_DP), dst.centerX(),
+                    dst.bottom - GamePanel.dpToPx(DISK_HEIGHT_DP) * i, colors[i % colors.length]);
         }
     }
 
@@ -55,7 +60,6 @@ class Peg {
         for (int i = 0; i < n; i++) {
             disks[i].draw(canvas);
         }
-
     }
 
     /**
@@ -64,7 +68,7 @@ class Peg {
     void pickUp() {
         if (n > 0) {
             disks[n-1].r.bottom = panelHeight - height;
-            disks[n-1].r.top = panelHeight - (height + panelHeight / 34);
+            disks[n-1].r.top = panelHeight - (height + GamePanel.dpToPx(DISK_HEIGHT_DP));
         }
     }
 
@@ -94,10 +98,10 @@ class Peg {
         else {
             if (n == 1) {
                 disks[n - 1].r.bottom = panelHeight;
-                disks[n - 1].r.top = panelHeight - panelHeight / 34;
+                disks[n - 1].r.top = panelHeight - GamePanel.dpToPx(DISK_HEIGHT_DP);
             } else {
                 disks[n - 1].r.bottom = disks[n - 2].r.top;
-                disks[n - 1].r.top = disks[n - 1].r.bottom - panelHeight / 34;
+                disks[n - 1].r.top = disks[n - 1].r.bottom - GamePanel.dpToPx(DISK_HEIGHT_DP);
             }
         }
     }
@@ -139,7 +143,14 @@ class Peg {
      */
     void setDisks(Disk[] disks) {
         for (int i = 0; i < n; i++) {
-            this.disks[i] = new Disk(disks[i].getWidth(), disks[i].getHeight(), dst.centerX(), dst.bottom - panelHeight / 34 * i, disks[i].getColor());
+            this.disks[i] = new Disk(disks[i].getWidth(), disks[i].getHeight(), dst.centerX(), dst.bottom - GamePanel.dpToPx(DISK_HEIGHT_DP) * i, disks[i].getColor());
+        }
+    }
+
+    void resetDisks() {
+        disks[0].resize(dst.bottom, dst.bottom + GamePanel.dpToPx(DISK_HEIGHT_DP));
+        for (int i = 1; i < n; i++) {
+            disks[i].resize(disks[i-1].r.top, disks[i-1].r.top + GamePanel.dpToPx(DISK_HEIGHT_DP));
         }
     }
 }

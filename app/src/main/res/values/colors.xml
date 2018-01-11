@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+
+    <!-- App Theme colors -->
+    <color name="colorPrimary">#00acc1</color>
+    <color name="colorPrimaryDark">#007c91</color>
+    <color name="colorAccent">#78909c</color>
+
+    <!-- Text colors -->
+    <color name="text_color_light">#deffffff</color>
+    <color name="text_color_dark">#de000000</color>
+
+    <!-- !!Disk colors!! -->
+    <!-- Basic colors -->
+    <color name="black">#000000</color>
+    <color name="gray">#bbbbbb</color>
+    <color name="yellow">#ffff00</color>
+    <color name="blue">#0000ff</color>
+    <color name="green">#00ff00</color>
+    <color name="orange">#ff8000</color>
+    <color name="purple">#ff00ff</color>
+    <color name="light_blue">#82cafa</color>
+    <color name="red">#ff0000</color>
+
+    <!-- Additional colors -->
+    <color name="mint_green">#20c996</color>
+    <color name="royal_blue">#6c8fd0</color>
+    <color name="mustard_yellow">#f4b710</color>
+    <color name="heather_purple">#b19cd9</color>
+
 </resources>

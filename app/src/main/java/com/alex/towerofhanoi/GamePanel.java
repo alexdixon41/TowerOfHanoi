@@ -1,32 +1,39 @@
 package com.alex.towerofhanoi;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
-
 /**
  * Created by Alex on 10/7/2017.
+ *
+ * Custom view for game graphics.
  */
 
 public class GamePanel extends View {
 
     private Peg pegA, pegB, pegC;
-    int zone = -1;                                //Section of the GamePanel where user is touching
-    Peg startPeg, lastPeg;                        //The Peg where current disk was picked up from; the last Peg the disk was contained in
+    private int zone = -1;                        //Section of the GamePanel where user is touching
+    private Peg startPeg;
+    private Peg lastPeg;                          //The Peg where current disk was picked up from; the last Peg the disk was contained in
     int moves = 0;                                //The number of moves
     int numDisks;                                 //The number of disks for a certain game
-    boolean newGame;                              //Whether the GamePanel should recreate for new game
-    GameActivity mainActivity;
+    private boolean newGame;                      //Whether the GamePanel should recreate for new game
     private OnGameCompleteListener onGameCompleteListener;
+    public OnGameStartedListener onGameStartedListener;
     private Disk[][] diskArrays;
     private int[] sizes;
+    private boolean gameStarted;
+    private GameActivity mainActivity;
+    static int density;
 
+    @SuppressWarnings("EmptyMethod")
     @Override
     public boolean performClick() {
         return super.performClick();
@@ -49,6 +56,10 @@ public class GamePanel extends View {
         numDisks = n;
         moves = m;
         mainActivity = (GameActivity)context;
+        gameStarted = false;
+        density = mainActivity.getResources().getDisplayMetrics().densityDpi;
+
+        setBackgroundColor(Color.TRANSPARENT);
 
         if (pegs != null) {
             newGame = false;
@@ -65,6 +76,10 @@ public class GamePanel extends View {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        if (!gameStarted) {
+                            onGameStartedListener.onGameStarted();
+                            gameStarted = true;
+                        }
                         if (event.getX() < getWidth() / 3) {
                             pegA.pickUp();
                             lastPeg = pegA;
@@ -129,29 +144,47 @@ public class GamePanel extends View {
                 }
                 return false;
             }
-
         });
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        pegA.resetDisks();
+        pegB.resetDisks();
+        pegC.resetDisks();
+        invalidate();
+    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        int pegHeight = getHeight() / 34 * (numDisks + 1);
-
+        int pegHeight = dpToPx(Peg.DISK_HEIGHT_DP) * (numDisks + 1);
         if (newGame) {
             pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 6, pegHeight, getHeight(), getWidth());
             pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2, pegHeight, getHeight(), getWidth());
             pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 5 * getWidth() / 6, pegHeight, getHeight(), getWidth());
 
-            pegA.populateDisks(numDisks, getWidth() / 3 - getWidth() / 30);
+            int maxDiskSize;
+            int spacing;
+            if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                maxDiskSize = getWidth() / 3 - getWidth() / 30;
+                spacing = (maxDiskSize - getHeight() / 20) / (numDisks - 1);
+            }
+            else {
+                maxDiskSize = getHeight() / 3 - getHeight() / 30;
+                spacing = (maxDiskSize - getWidth() / 20) / (numDisks - 1);
+            }
+
+            pegA.populateDisks(numDisks, maxDiskSize, spacing);
 
             newGame = false;
         }
         else {
-            pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 4 - 50, pegHeight, getHeight(), getWidth());
-            pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2 - 10, pegHeight, getHeight(), getWidth());
-            pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 3 * getWidth() / 4 + 50, pegHeight, getHeight(), getWidth());
+            pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 6, pegHeight, getHeight(), getWidth());
+            pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2, pegHeight, getHeight(), getWidth());
+            pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 5 * getWidth() / 6, pegHeight, getHeight(), getWidth());
 
             pegA.setSize(sizes[0]);
             pegB.setSize(sizes[1]);
@@ -170,13 +203,11 @@ public class GamePanel extends View {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setBackgroundColor(Color.WHITE);
 
         pegA.draw(canvas);
         pegB.draw(canvas);
         pegC.draw(canvas);
     }
-
 
     public Peg[] getPegs() {
         return new Peg[]{pegA, pegB, pegC};
@@ -185,9 +216,8 @@ public class GamePanel extends View {
     /**
      * Check if the puzzle has been completed.
      */
-    public void update() {
+    private void update() {
         if (pegC.getSize() == numDisks) {
-
             if (moves == Math.pow(2, numDisks) - 1)
                 onGameCompleteListener.onGameComplete(true, moves, numDisks);
             else
@@ -195,7 +225,15 @@ public class GamePanel extends View {
         }
     }
 
+    static int dpToPx(int dp) {
+        return (density / DisplayMetrics.DENSITY_DEFAULT) * dp;
+    }
+
     public void setOnGameCompleteListener(OnGameCompleteListener eventListener) {
         onGameCompleteListener = eventListener;
+    }
+
+    public void setOnGameStartedListener(OnGameStartedListener eventListener) {
+        onGameStartedListener = eventListener;
     }
 }

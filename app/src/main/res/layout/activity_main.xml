@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimary"
     tools:context="com.alex.towerofhanoi.MainActivity">
 
     <android.support.v4.widget.Space
@@ -13,13 +14,17 @@
 
     <Button
         android:id="@+id/button"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginStart="40dp"
+        android:background="@color/mint_green"
         android:onClick="newGame"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/new_game"
         android:textAllCaps="false"
         android:textSize="24sp" />
@@ -31,13 +36,17 @@
 
     <Button
         android:id="@+id/button2"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginStart="40dp"
+        android:background="@color/royal_blue"
         android:onClick="resumeGame"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/load_game"
         android:textAllCaps="false"
         android:textSize="24sp" />
@@ -49,16 +58,20 @@
 
     <Button
         android:id="@+id/button3"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginStart="40dp"
+        android:background="@color/mustard_yellow"
+        android:onClick="settings"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/settings"
         android:textAllCaps="false"
-        android:textSize="24sp"
-        android:onClick="settings" />
+        android:textSize="24sp" />
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -67,12 +80,16 @@
 
     <Button
         android:id="@+id/button4"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginStart="40dp"
+        android:background="@color/heather_purple"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/about"
         android:textAllCaps="false"
         android:textSize="24sp" />

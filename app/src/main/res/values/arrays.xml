@@ -27,4 +27,37 @@
         <item>11</item>
         <item>12</item>
     </string-array>
+
+    <string-array name="disk_color_strings" >
+        <item>#000000</item>
+        <item>#cccccc</item>
+        <item>#ffff00</item>
+        <item>#0000ff</item>
+        <item>#00ff00</item>
+        <item>#ff8000</item>
+        <item>#ff00ff</item>
+        <item>#82cafa</item>
+        <item>#ff0000</item>
+        <item>#20c996</item>
+        <item>#6c8fd0</item>
+        <item>#f4b710</item>
+        <item>#b19cd9</item>
+    </string-array>
+
+    <string-array name="disk_color_keys" >
+        <item>disk_color_black</item>
+        <item>disk_color_gray</item>
+        <item>disk_color_yellow</item>
+        <item>disk_color_blue</item>
+        <item>disk_color_green</item>
+        <item>disk_color_orange</item>
+        <item>disk_color_purple</item>
+        <item>disk_color_light_blue</item>
+        <item>disk_color_red</item>
+        <item>disk_color_mint_green</item>
+        <item>disk_color_royal_blue</item>
+        <item>disk_color_mustard_yellow</item>
+        <item>disk_color_heather_purple</item>
+    </string-array>
+
 </resources>

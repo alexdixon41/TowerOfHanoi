@@ -1,14 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference
+    <SwitchPreference android:title="@string/timer_title"
+        android:key="timer_setting"
+        android:defaultValue="true"/>
+
+    <SwitchPreference android:title="@string/show_moves_title"
+        android:key="moves_setting"
+        android:defaultValue="true"/>
+
+    <ListPreference android:title="@string/num_disk_title"
         android:key="numDiskSelection"
         android:defaultValue="5"
         android:summary="@string/num_disk_message"
         android:dialogTitle="@string/num_disk_title"
         android:entries="@array/num_disk_selections"
-        android:entryValues="@array/num_disk_values"
-        android:title="@string/num_disk_title" />
+        android:entryValues="@array/num_disk_values" />
+
+    <Preference android:title="@string/set_background"
+        android:summary="@string/background_summary">
+        <intent android:targetPackage="com.alex.towerofhanoi"
+            android:targetClass="com.alex.towerofhanoi.BackgroundPicker"/>
+    </Preference>
+
+    <PreferenceScreen
+        android:title="Disk Appearance"
+        android:summary="@string/disk_summary">
+        <PreferenceCategory
+            android:title="@string/basic_colors" >
+            <CheckBoxPreference
+                android:key="disk_color_black"
+                android:icon="@drawable/color_black"
+                android:title="@string/black"/>
+            <CheckBoxPreference
+                android:key="disk_color_gray"
+                android:icon="@drawable/color_gray"
+                android:title="@string/gray"/>
+            <CheckBoxPreference
+                android:key="disk_color_blue"
+                android:icon="@drawable/color_blue"
+                android:title="@string/blue"/>
+            <CheckBoxPreference
+                android:key="disk_color_light_blue"
+                android:icon="@drawable/color_light_blue"
+                android:title="@string/light_blue"/>
+            <CheckBoxPreference
+                android:key="disk_color_green"
+                android:icon="@drawable/color_green"
+                android:title="@string/green"/>
+            <CheckBoxPreference
+                android:key="disk_color_orange"
+                android:icon="@drawable/color_orange"
+                android:title="@string/orange"/>
+            <CheckBoxPreference
+                android:key="disk_color_purple"
+                android:icon="@drawable/color_purple"
+                android:title="@string/purple"/>
+            <CheckBoxPreference
+                android:key="disk_color_red"
+                android:icon="@drawable/color_red"
+                android:title="@string/red"/>
+            <CheckBoxPreference
+                android:key="disk_color_yellow"
+                android:icon="@drawable/color_yellow"
+                android:title="@string/yellow"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="Additional Colors">
+            <CheckBoxPreference
+                android:key="disk_color_mint_green"
+                android:icon="@drawable/color_mint_green"
+                android:title="@string/mint_green"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
+                android:key="disk_color_royal_blue"
+                android:icon="@drawable/color_royal_blue"
+                android:title="@string/royal_blue"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
+                android:key="disk_color_mustard_yellow"
+                android:icon="@drawable/color_mustard_yellow"
+                android:title="@string/mustard_yellow"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
+                android:key="disk_color_heather_purple"
+                android:icon="@drawable/color_heather_purple"
+                android:title="@string/heather_purple"
+                android:defaultValue="true"/>
+        </PreferenceCategory>
+    </PreferenceScreen>
 
 
 </PreferenceScreen>
