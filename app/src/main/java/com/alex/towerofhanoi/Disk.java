@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 class Disk {
-    private final Paint paint;
+    private Paint paint;
     Rect r;
     private int width;
     private int height;

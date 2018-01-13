@@ -7,14 +7,17 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true">
-        <activity android:name=".SplashActivity"
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,6 +45,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.alex.towerofhanoi.SettingsActivity" />
         </activity>
+        <activity
+            android:name=".HighScoreActivity"
+            android:label="@string/high_scores"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.alex.towerofhanoi.MainActivity" />
+        </activity>
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/IntroTheme" />
     </application>
 
 </manifest>

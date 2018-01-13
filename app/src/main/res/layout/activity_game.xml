@@ -1,56 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     tools:context="com.alex.towerofhanoi.GameActivity">
 
-    <LinearLayout
-        android:id="@+id/topLinearLayout"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:baselineAligned="false">
+        android:layout_height="match_parent"
+        android:background="#ffffff">
 
         <LinearLayout
-            android:id="@+id/move_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-            <TextView
-                android:id="@+id/move_display"
-                android:layout_width="match_parent"
+            android:id="@+id/topLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:id="@+id/move_container"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:textSize="20sp"
-                android:textColor="@color/text_color_light"
-                android:gravity="start"
-                android:layout_marginStart="10dp"
-                android:text="@string/moves"/>
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/move_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_color_light"
+                    android:gravity="start"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/moves"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/time_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <Chronometer
+                    android:id="@+id/time_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_color_light"
+                    android:gravity="end"
+                    android:layout_marginEnd="10dp" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/time_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-            <Chronometer
-                android:id="@+id/time_display"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20sp"
-                android:textColor="@color/text_color_light"
-                android:gravity="end"
-                android:layout_marginEnd="10dp" />
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/fullscreen_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </RelativeLayout>
 
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -60,7 +65,6 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-    </com.google.android.gms.ads.AdView>
+        ads:adUnitId="ca-app-pub-7938633416120746/4364595544"/>
 
 </RelativeLayout>

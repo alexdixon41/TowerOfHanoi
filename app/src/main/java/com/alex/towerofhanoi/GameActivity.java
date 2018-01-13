@@ -39,6 +39,8 @@ public class GameActivity extends AppCompatActivity {
     private static String[] chosenDiskColors;            // String values for chosen disk colors
     private static int numChosenDiskColors = 0;          // How many disk colors have been chosen
     private boolean shouldReset = false;
+    private boolean gameStarted = false;
+    private String backgroundColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,12 @@ public class GameActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        MobileAds.initialize(this, "ca-app-pub-7938633416120746~9864334238");
         setContentView(R.layout.activity_game);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Get views
-        LinearLayout topLayout = findViewById(R.id.topLinearLayout);
         fullScreenContent = findViewById(R.id.fullscreen_content);
         moveDisplay = findViewById(R.id.move_display);
         timer = findViewById(R.id.time_display);
@@ -73,8 +73,8 @@ public class GameActivity extends AppCompatActivity {
         bannerAdView.loadAd(adRequest);
 
         //Background
-        String backgroundColor = prefs.getString("background_color", "#ffffff");
-        if (backgroundColor.equals("#ffffff") || backgroundColor.equals("#dddddd")) {
+        backgroundColor = prefs.getString("background_color", "#00acc1");
+        if (backgroundColor.equals("#ffffff") || backgroundColor.equals("#dddddd") || backgroundColor.equals("#00ff7f") || backgroundColor.equals("#d4e157")) {
             moveDisplay.setTextColor(getResources().getColor(R.color.text_color_dark));
             timer.setTextColor(getResources().getColor(R.color.text_color_dark));
         }
@@ -136,16 +136,18 @@ public class GameActivity extends AppCompatActivity {
         gamePanel.setOnGameStartedListener(new OnGameStartedListener() {
             @Override
             public void onGameStarted() {
-                timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-                    @Override
-                    public void onChronometerTick(Chronometer chronometer) {
-                        time = SystemClock.elapsedRealtime() - chronometer.getBase() + previousTime;
-                        chronometer.setText(String.format(getResources().getString(R.string.timer_text),
-                                getTimerText(time)));
-                    }
-                });
                 timer.setBase(SystemClock.elapsedRealtime());
                 timer.start();
+                gameStarted = true;
+            }
+        });
+
+        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                time = SystemClock.elapsedRealtime() - chronometer.getBase() + previousTime;
+                chronometer.setText(String.format(getResources().getString(R.string.timer_text),
+                        getTimerText(time)));
             }
         });
 
@@ -159,6 +161,8 @@ public class GameActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 assert inflater != null;
                 View popupView = inflater.inflate(R.layout.success_popup_layout, fullScreenContent, false);
+                if (backgroundColor.equals("#00acc1"))
+                    popupView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 TextView successMoves = popupView.findViewById(R.id.success_moves);
                 TextView successMessage = popupView.findViewById(R.id.success_message);
                 TextView successTitle = popupView.findViewById(R.id.success_title);
@@ -188,7 +192,8 @@ public class GameActivity extends AppCompatActivity {
                     bestTimeDisplay.setVisibility(View.INVISIBLE);
                 }
 
-                popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
+                popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setAnimationStyle(R.style.Animation);
                 popupWindow.showAtLocation(fullScreenContent, Gravity.CENTER, 0, 0);
             }
         });
@@ -202,11 +207,23 @@ public class GameActivity extends AppCompatActivity {
             height = 50;
         else
             height = 90;
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, topLayout.getHeight(), 0, (int)(height * displayMetrics.density) + 50);
-        fullScreenContent.setLayoutParams(params);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, (int)(height * displayMetrics.density) + 50);
+        relativeLayout.setLayoutParams(params);
 
         updateText(moves);
+    }
+
+    @Override
+    public void onResume() {
+        //Resume timer
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        previousTime = prefs.getLong("previous_time", 0);
+        if (gameStarted) {
+            timer.setBase(SystemClock.elapsedRealtime());
+            timer.start();
+        }
+        super.onResume();
     }
 
     @Override
@@ -227,10 +244,10 @@ public class GameActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
+        timer.stop();
         numChosenDiskColors = 0;
         if (popupWindow != null)
             popupWindow.dismiss();
-
         SharedPreferences.Editor editor = prefs.edit();
 
         // When game should be reset, clear certain preferences
@@ -264,7 +281,7 @@ public class GameActivity extends AppCompatActivity {
      * @param time  time in milliseconds
      * @return      formatted String representing time value
      */
-    private String getTimerText(long time) {
+    static String getTimerText(long time) {
         int h = (int)(time / 3600000);
         int m = (int)(time - h*3600000)/60000;
         int s = (int)(time - h*3600000 - m*60000)/1000;

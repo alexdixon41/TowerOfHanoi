@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "269187461189",
+    "firebase_url": "https://towerofhanoi-5951d.firebaseio.com",
+    "project_id": "towerofhanoi-5951d",
+    "storage_bucket": "towerofhanoi-5951d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269187461189:android:c7898ebefe4aa8d1",
+        "android_client_info": {
+          "package_name": "com.alex.towerofhanoi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269187461189-u1382ave48d8um10fdaq2p3bda3jha8t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alex.towerofhanoi",
+            "certificate_hash": "a9cf6054791b2e269d9f58aec87d02ebe5708763"
+          }
+        },
+        {
+          "client_id": "269187461189-2s2fo5jbcgnk4mounsdakaok6md9pv8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQtdtNsVo2UmshxKKgOx1hEBVZb2Ej8bw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269187461189-2s2fo5jbcgnk4mounsdakaok6md9pv8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

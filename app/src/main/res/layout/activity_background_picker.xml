@@ -7,10 +7,9 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/choice_grid"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
-
         grid:alignmentMode="alignBounds"
         grid:columnCount="3"
         grid:rowOrderPreserved="false"
@@ -67,16 +66,6 @@
             android:onClick="setBackgroundColor"/>
 
         <Button
-            android:tag="#607d8b"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            grid:layout_columnWeight="1"
-            grid:layout_gravity="fill_horizontal"
-            android:gravity="center"
-            android:background="#607d8b"
-            android:onClick="setBackgroundColor"/>
-
-        <Button
             android:tag="#4527a0"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -84,6 +73,16 @@
             grid:layout_gravity="fill_horizontal"
             android:gravity="center"
             android:background="#4527a0"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
+            android:tag="#607d8b"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#607d8b"
             android:onClick="setBackgroundColor"/>
 
         <Button
@@ -97,6 +96,16 @@
             android:onClick="setBackgroundColor"/>
 
         <Button
+            android:tag="#5c223c"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#5c223c"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
             android:tag="#ef5350"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -104,6 +113,16 @@
             grid:layout_gravity="fill_horizontal"
             android:gravity="center"
             android:background="#ef5350"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
+            android:tag="#f08080"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#f08080"
             android:onClick="setBackgroundColor"/>
 
         <Button
@@ -117,6 +136,16 @@
             android:onClick="setBackgroundColor"/>
 
         <Button
+            android:tag="#d2b48c"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#d2b48c"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
             android:tag="#d4e157"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -124,6 +153,46 @@
             grid:layout_gravity="fill_horizontal"
             android:gravity="center"
             android:background="#d4e157"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
+            android:tag="#00ff7f"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#00ff7f"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
+            android:tag="#00acc1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#00acc1"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
+            android:tag="#007c91"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#007c91"
+            android:onClick="setBackgroundColor"/>
+
+        <Button
+            android:tag="#228b22"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            grid:layout_columnWeight="1"
+            grid:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:background="#228b22"
             android:onClick="setBackgroundColor"/>
 
     </android.support.v7.widget.GridLayout>
