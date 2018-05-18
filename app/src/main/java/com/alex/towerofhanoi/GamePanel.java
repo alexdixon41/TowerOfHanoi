@@ -1,10 +1,15 @@
 package com.alex.towerofhanoi;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -19,12 +24,11 @@ import android.view.View;
 public class GamePanel extends View {
 
     private Peg pegA, pegB, pegC;
-    private int zone = -1;                        //Section of the GamePanel where user is touching
-    private Peg startPeg;
-    private Peg lastPeg;                          //The Peg where current disk was picked up from; the last Peg the disk was contained in
-    int moves = 0;                                //The number of moves
-    int numDisks;                                 //The number of disks for a certain game
-    private boolean newGame;                      //Whether the GamePanel should recreate for new game
+    private int zone = -1;                     //Section of the GamePanel where user is touching
+    Peg startPeg, lastPeg;                     //The Peg where current disk was picked up from; the last Peg the disk was on
+    int moves = 0;                             //The number of moves
+    int numDisks;                              //The number of disks for a certain game
+    private boolean newGame;                   //Whether the GamePanel should recreate for new game
     private OnGameCompleteListener onGameCompleteListener;
     public OnGameStartedListener onGameStartedListener;
     private Disk[][] diskArrays;
@@ -32,6 +36,11 @@ public class GamePanel extends View {
     private boolean gameStarted;
     private GameActivity mainActivity;
     static int density;
+    int[] diskColors;
+    boolean moving;                            //Check if any disks are currently being moved
+    private SoundPool soundPool;
+    private int[] soundEffects;
+    private boolean soundEnabled;
 
     @SuppressWarnings("EmptyMethod")
     @Override
@@ -50,7 +59,7 @@ public class GamePanel extends View {
      * @param pegs     array of pegs from previous game
      * @param m        the number of moves from previous game
      */
-    public GamePanel(Context context, int n, @Nullable Peg[] pegs, int m) {
+    public GamePanel(Context context, int n, @Nullable Peg[] pegs, int m, String[] colorStrings, int numDiskColors) {
         super(context);
         setFocusable(true);
         numDisks = n;
@@ -58,6 +67,22 @@ public class GamePanel extends View {
         mainActivity = (GameActivity)context;
         gameStarted = false;
         density = mainActivity.getResources().getDisplayMetrics().densityDpi;
+        soundEnabled = mainActivity.sound;
+
+        // Load sounds for soundPool
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            createNewSoundPool();
+        else
+            createOldSoundPool();
+        soundEffects = new int[3];
+        soundEffects[0] = soundPool.load(getContext(), R.raw.pickup, 1);
+        soundEffects[1] = soundPool.load(getContext(), R.raw.move, 1);
+        soundEffects[2] = soundPool.load(getContext(), R.raw.drop, 1);
+
+        // Store disk colors from GameActivity
+        diskColors = new int[colorStrings.length];
+        for (int i = 0; i < numDiskColors; i++)
+            diskColors[i] = Color.parseColor(colorStrings[i]);
 
         setBackgroundColor(Color.TRANSPARENT);
 
@@ -76,6 +101,9 @@ public class GamePanel extends View {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        moving = true;                          //move has started
+                        if (soundEnabled)
+                            soundPool.play(soundEffects[0], 1, 1, 1, 0, 1f);
                         if (!gameStarted) {
                             onGameStartedListener.onGameStarted();
                             gameStarted = true;
@@ -104,16 +132,22 @@ public class GamePanel extends View {
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         if (zone != 0 && event.getX() < getWidth() / 3) {
+                            if (soundEnabled)
+                                soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
                             pegA.move(lastPeg);
                             lastPeg = pegA;
                             zone = 0;
                         }
                         else if (zone != 1 && event.getX() > getWidth() / 3 && event.getX() < 2 * getWidth() / 3) {
+                            if (soundEnabled)
+                                soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
                             pegB.move(lastPeg);
                             lastPeg = pegB;
                             zone = 1;
                         }
                         else if (zone != 2 && event.getX() > 2 * getWidth() / 3){
+                            if (soundEnabled)
+                                soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
                             pegC.move(lastPeg);
                             lastPeg = pegC;
                             zone = 2;
@@ -121,21 +155,12 @@ public class GamePanel extends View {
                         invalidate();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        if (event.getX() < getWidth() / 3) {
-                            if (pegA.checkMove() && startPeg != pegA)
-                                moves++;
-                            pegA.drop(startPeg);
-                        }
-                        else if (event.getX() < 2 * getWidth() / 3) {
-                            if (pegB.checkMove() && startPeg != pegB)
-                                moves++;
-                            pegB.drop(startPeg);
-                        }
-                        else {
-                            if (pegC.checkMove() && startPeg != pegC)
-                                moves++;
-                            pegC.drop(startPeg);
-                        }
+                        moving = false;                       //move is complete
+                        if (soundEnabled)
+                            soundPool.play(soundEffects[2], 1, 1, 1, 0, 1f);
+                        if (lastPeg.checkMove() && startPeg != lastPeg)
+                            moves++;
+                        lastPeg.drop(startPeg);
                         mainActivity.updateText(moves);
                         update();
                         invalidate();
@@ -162,9 +187,9 @@ public class GamePanel extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         int pegHeight = dpToPx(Peg.DISK_HEIGHT_DP) * (numDisks + 1);
         if (newGame) {
-            pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 6, pegHeight, getHeight(), getWidth());
-            pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2, pegHeight, getHeight(), getWidth());
-            pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 5 * getWidth() / 6, pegHeight, getHeight(), getWidth());
+            pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 6, pegHeight, getHeight(), getWidth(), diskColors);
+            pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2, pegHeight, getHeight(), getWidth(), diskColors);
+            pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 5 * getWidth() / 6, pegHeight, getHeight(), getWidth(), diskColors);
 
             int maxDiskSize;
             int spacing;
@@ -182,9 +207,9 @@ public class GamePanel extends View {
             newGame = false;
         }
         else {
-            pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 6, pegHeight, getHeight(), getWidth());
-            pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2, pegHeight, getHeight(), getWidth());
-            pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 5 * getWidth() / 6, pegHeight, getHeight(), getWidth());
+            pegA = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 6, pegHeight, getHeight(), getWidth(), diskColors);
+            pegB = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), getWidth() / 2, pegHeight, getHeight(), getWidth(), diskColors);
+            pegC = new Peg(BitmapFactory.decodeResource(getResources(), R.drawable.peg), 5 * getWidth() / 6, pegHeight, getHeight(), getWidth(), diskColors);
 
             pegA.setSize(sizes[0]);
             pegB.setSize(sizes[1]);
@@ -207,6 +232,18 @@ public class GamePanel extends View {
         pegA.draw(canvas);
         pegB.draw(canvas);
         pegC.draw(canvas);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void createNewSoundPool() {
+        AudioAttributes attributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
+        soundPool = new SoundPool.Builder().setAudioAttributes(attributes).build();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void createOldSoundPool() {
+        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
     }
 
     public Peg[] getPegs() {

@@ -2,8 +2,6 @@ package com.alex.towerofhanoi;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -36,11 +34,11 @@ public class GameActivity extends AppCompatActivity {
     private Chronometer timer;
     private long time, previousTime;                     // The current game time and saved game time
     private boolean showTimer;                           // Whether or not to show the timer, based on user preference
-    private static String[] chosenDiskColors;            // String values for chosen disk colors
-    private static int numChosenDiskColors = 0;          // How many disk colors have been chosen
+    private String[] chosenDiskColors;            // String values for chosen disk colors
     private boolean shouldReset = false;
     private boolean gameStarted = false;
     private String backgroundColor;
+    boolean sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,20 +100,22 @@ public class GameActivity extends AppCompatActivity {
         time = previousTime = prefs.getLong("previous_time", 0);
         timer.setText(String.format(getResources().getString(R.string.timer_text), getTimerText(previousTime)));
 
+        //Enable or disable sounds based on Preference
+        sound = prefs.getBoolean("sound_effects_setting", true);
+
         //Disk settings
         String[] diskColorKeys = getResources().getStringArray(R.array.disk_color_keys);
         String[] diskColorStrings = getResources().getStringArray(R.array.disk_color_strings);
         chosenDiskColors = new String[diskColorKeys.length];
+        int numChosen = 0;
         for (int i = 0; i < diskColorKeys.length; i++) {
             if (prefs.getBoolean(diskColorKeys[i], false)) {
-                chosenDiskColors[numChosenDiskColors] = diskColorStrings[i];
-                numChosenDiskColors++;
+                chosenDiskColors[numChosen] = diskColorStrings[i];
+                numChosen++;
             }
         }
-        if (numChosenDiskColors == 0) {
+        if (numChosen == 0)
             chosenDiskColors = new String[]{"#20c996", "#6c8fd0", "#f4b710", "#b19cd9"};
-            numChosenDiskColors = 4;
-        }
 
         //Load game state values from SharedPreferences and initialize GamePanel accordingly
         Gson gson = new Gson();
@@ -126,10 +126,10 @@ public class GameActivity extends AppCompatActivity {
         int selectedNumDisks = Integer.parseInt(prefs.getString("numDiskSelection", "5"));
         int previousNumDisks = prefs.getInt("previous_num_disks", 5);
         if (peg1.isEmpty() && peg2.isEmpty() && peg3.isEmpty())
-            gamePanel = new GamePanel(this, selectedNumDisks, null, moves);
+            gamePanel = new GamePanel(this, selectedNumDisks, null, moves, chosenDiskColors, numChosen);
         else {
             Peg[] pegs = {gson.fromJson(peg1, Peg.class), gson.fromJson(peg2, Peg.class), gson.fromJson(peg3, Peg.class)};
-            gamePanel = new GamePanel(this, previousNumDisks, pegs, moves);
+            gamePanel = new GamePanel(this, previousNumDisks, pegs, moves, chosenDiskColors, numChosen);
         }
 
         // Start timer when game started
@@ -245,10 +245,16 @@ public class GameActivity extends AppCompatActivity {
         super.onPause();
 
         timer.stop();
-        numChosenDiskColors = 0;
         if (popupWindow != null)
             popupWindow.dismiss();
         SharedPreferences.Editor editor = prefs.edit();
+
+        if (gamePanel.moving) {
+            if (gamePanel.lastPeg != gamePanel.startPeg)
+                gamePanel.startPeg.move(gamePanel.lastPeg);
+            gamePanel.startPeg.drop(gamePanel.startPeg);
+            gamePanel.moving = false;
+        }
 
         // When game should be reset, clear certain preferences
         if (shouldReset) {
@@ -465,14 +471,6 @@ public class GameActivity extends AppCompatActivity {
     public void restart(View v) {
         shouldReset = true;
         recreate();
-    }
-
-    static String[] getChosenDiskColors() {
-        return chosenDiskColors;
-    }
-
-    static int getNumChosenDiskColors() {
-        return numChosenDiskColors;
     }
 
 }

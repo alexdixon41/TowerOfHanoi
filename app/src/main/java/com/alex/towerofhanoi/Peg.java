@@ -2,7 +2,6 @@ package com.alex.towerofhanoi;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 
 /**
@@ -28,7 +27,7 @@ class Peg {
      * @param panelHeight  the height of the panel the Peg is drawn in
      * @param panelWidth   the width of the panel the Peg is drawn in
      */
-    Peg(Bitmap res, int center, int height, int panelHeight, int panelWidth) {
+    Peg(Bitmap res, int center, int height, int panelHeight, int panelWidth, int[] diskColors) {
         this.height = height;
         this.center = center;
         this.panelHeight = panelHeight;
@@ -36,9 +35,7 @@ class Peg {
         n = 0;
         image = res;
         disks = new Disk[12];
-        colors = new int[GameActivity.getNumChosenDiskColors()];
-        for (int i = 0; i < colors.length; i++)
-            colors[i] = Color.parseColor(GameActivity.getChosenDiskColors()[i]);
+        colors = diskColors;
     }
 
     /**

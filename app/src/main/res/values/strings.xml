@@ -32,6 +32,7 @@
     <string name="background_failure">Background not set</string>
     <string name="timer_title">Show Timer</string>
     <string name="show_moves_title">Show Moves</string>
+    <string name="sound_effects_title">Sound Effects</string>
     <string name="help">Help</string>
 
     <!-- Strings related to high scores -->

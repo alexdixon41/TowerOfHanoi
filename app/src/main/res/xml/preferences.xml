@@ -9,6 +9,10 @@
         android:key="moves_setting"
         android:defaultValue="true"/>
 
+    <SwitchPreference android:title="@string/sound_effects_title"
+        android:key="sound_effects_setting"
+        android:defaultValue="true"/>
+
     <ListPreference android:title="@string/num_disk_title"
         android:key="numDiskSelection"
         android:defaultValue="5"
