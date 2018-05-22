@@ -26,8 +26,14 @@
     <string name="num_disk_message">Set how many disks are in the game</string>
     <string name="set_background">Background</string>
     <string name="background_summary">Set the game background</string>
-    <string name="disk_colors">Disk Appearance</string>
-    <string name="disk_summary">Choose colors or textures for disks</string>
+    <string name="peg_appearance">Peg Appearance</string>
+    <string name="peg_description">Set texture of pegs</string>
+    <string name="disk_colors">Disk Colors</string>
+    <string name="disk_summary">Choose colors for disks</string>
+    <string name="base_stone">Stone</string>
+    <string name="base_texture">Base Texture</string>
+    <string name="base_texture_description">Choose the texture for the base</string>
+
     <string name="background_success">Background set successfully</string>
     <string name="background_failure">Background not set</string>
     <string name="timer_title">Show Timer</string>
@@ -47,6 +53,7 @@
 
     <!-- Strings related to disk colors -->
     <string name="basic_colors">Basic Colors</string>
+    <string name="additional_colors">Additional Colors</string>
 
     <!-- Basic colors -->
     <string name="black">Black</string>
@@ -64,6 +71,8 @@
     <string name="royal_blue">Royal Blue</string>
     <string name="mustard_yellow">Mustard Yellow</string>
     <string name="heather_purple">Heather Purple</string>
+    <string name="deep_orange">Deep Orange</string>
+    <string name="blue_gray">Blue Gray</string>
 
     <!-- Disk numbers -->
     <string name="two">2</string>

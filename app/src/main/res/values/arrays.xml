@@ -42,6 +42,8 @@
         <item>#6c8fd0</item>
         <item>#f4b710</item>
         <item>#b19cd9</item>
+        <item>#ff5722</item>
+        <item>#607d8b</item>
     </string-array>
 
     <string-array name="disk_color_keys" >
@@ -58,6 +60,8 @@
         <item>disk_color_royal_blue</item>
         <item>disk_color_mustard_yellow</item>
         <item>disk_color_heather_purple</item>
+        <item>disk_color_deep_orange</item>
+        <item>disk_color_blue_gray</item>
     </string-array>
 
 </resources>

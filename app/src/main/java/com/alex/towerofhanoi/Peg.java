@@ -7,7 +7,7 @@ import android.graphics.Rect;
 /**
  * Created by Alex on 10/11/2017.
  *
- * Class to represent a peg that holds an array of disks.
+ * Class to represent a light_wood that holds an array of disks.
  */
 
 class Peg {

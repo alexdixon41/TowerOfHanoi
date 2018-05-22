@@ -24,7 +24,6 @@ import android.view.View;
 public class GamePanel extends View {
 
     private Peg pegA, pegB, pegC;
-    private int zone = -1;                     //Section of the GamePanel where user is touching
     Peg startPeg, lastPeg;                     //The Peg where current disk was picked up from; the last Peg the disk was on
     int moves = 0;                             //The number of moves
     int numDisks;                              //The number of disks for a certain game
@@ -80,7 +79,7 @@ public class GamePanel extends View {
         soundEffects[2] = soundPool.load(getContext(), R.raw.drop, 1);
 
         // Store disk colors from GameActivity
-        diskColors = new int[colorStrings.length];
+        diskColors = new int[numDiskColors];
         for (int i = 0; i < numDiskColors; i++)
             diskColors[i] = Color.parseColor(colorStrings[i]);
 
@@ -101,6 +100,23 @@ public class GamePanel extends View {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        if (event.getX() < getWidth() / 3 && pegA.getSize() > 0) {
+                            pegA.pickUp();
+                            lastPeg = pegA;
+                            startPeg = pegA;
+                        }
+                        else if (event.getX() > getWidth() / 3 && event.getX() < 2 * getWidth() / 3 && pegB.getSize() > 0) {
+                            pegB.pickUp();
+                            lastPeg = pegB;
+                            startPeg = pegB;
+                        }
+                        else if (event.getX() > 2 * getWidth() / 3 && pegC.getSize() > 0){
+                            pegC.pickUp();
+                            lastPeg = pegC;
+                            startPeg = pegC;
+                        }
+                        else
+                            return false;
                         moving = true;                          //move has started
                         if (soundEnabled)
                             soundPool.play(soundEffects[0], 1, 1, 1, 0, 1f);
@@ -108,64 +124,43 @@ public class GamePanel extends View {
                             onGameStartedListener.onGameStarted();
                             gameStarted = true;
                         }
-                        if (event.getX() < getWidth() / 3) {
-                            pegA.pickUp();
-                            lastPeg = pegA;
-                            startPeg = pegA;
-                            zone = 0;
-                        }
-                        else if (event.getX() < 2 * getWidth() / 3) {
-                            pegB.pickUp();
-                            lastPeg = pegB;
-                            startPeg = pegB;
-                            zone = 1;
-                        }
-                        else {
-                            pegC.pickUp();
-                            lastPeg = pegC;
-                            startPeg = pegC;
-                            zone = 2;
-                        }
-                        if (lastPeg.getSize() == 0)
-                            return false;
                         invalidate();
                         return true;
                     case MotionEvent.ACTION_MOVE:
-                        if (zone != 0 && event.getX() < getWidth() / 3) {
-                            if (soundEnabled)
-                                soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
-                            pegA.move(lastPeg);
-                            lastPeg = pegA;
-                            zone = 0;
+                        if (moving) {
+                            if (lastPeg != pegA && event.getX() < getWidth() / 3) {
+                                if (soundEnabled)
+                                    soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
+                                pegA.move(lastPeg);
+                                lastPeg = pegA;
+                            } else if (lastPeg != pegB && event.getX() > getWidth() / 3 && event.getX() < 2 * getWidth() / 3) {
+                                if (soundEnabled)
+                                    soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
+                                pegB.move(lastPeg);
+                                lastPeg = pegB;
+                            } else if (lastPeg != pegC && event.getX() > 2 * getWidth() / 3) {
+                                if (soundEnabled)
+                                    soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
+                                pegC.move(lastPeg);
+                                lastPeg = pegC;
+                            }
+                            invalidate();
+                            return true;
                         }
-                        else if (zone != 1 && event.getX() > getWidth() / 3 && event.getX() < 2 * getWidth() / 3) {
-                            if (soundEnabled)
-                                soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
-                            pegB.move(lastPeg);
-                            lastPeg = pegB;
-                            zone = 1;
-                        }
-                        else if (zone != 2 && event.getX() > 2 * getWidth() / 3){
-                            if (soundEnabled)
-                                soundPool.play(soundEffects[1], 1, 1, 1, 0, 1f);
-                            pegC.move(lastPeg);
-                            lastPeg = pegC;
-                            zone = 2;
-                        }
-                        invalidate();
-                        return true;
                     case MotionEvent.ACTION_UP:
-                        moving = false;                       //move is complete
-                        if (soundEnabled)
-                            soundPool.play(soundEffects[2], 1, 1, 1, 0, 1f);
-                        if (lastPeg.checkMove() && startPeg != lastPeg)
-                            moves++;
-                        lastPeg.drop(startPeg);
-                        mainActivity.updateText(moves);
-                        update();
-                        invalidate();
-                        performClick();
-                        return true;
+                        if (moving) {
+                            moving = false;                       //move is complete
+                            if (soundEnabled)
+                                soundPool.play(soundEffects[2], 1, 1, 1, 0, 1f);
+                            if (lastPeg.checkMove() && startPeg != lastPeg)
+                                moves++;
+                            lastPeg.drop(startPeg);
+                            mainActivity.updateText(moves);
+                            update();
+                            invalidate();
+                            performClick();
+                            return true;
+                        }
                 }
                 return false;
             }

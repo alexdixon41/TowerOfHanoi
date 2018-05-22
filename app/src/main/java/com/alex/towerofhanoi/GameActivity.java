@@ -34,7 +34,6 @@ public class GameActivity extends AppCompatActivity {
     private Chronometer timer;
     private long time, previousTime;                     // The current game time and saved game time
     private boolean showTimer;                           // Whether or not to show the timer, based on user preference
-    private String[] chosenDiskColors;            // String values for chosen disk colors
     private boolean shouldReset = false;
     private boolean gameStarted = false;
     private String backgroundColor;
@@ -57,6 +56,8 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //TODO set background image for base
 
         //Get views
         fullScreenContent = findViewById(R.id.fullscreen_content);
@@ -106,7 +107,7 @@ public class GameActivity extends AppCompatActivity {
         //Disk settings
         String[] diskColorKeys = getResources().getStringArray(R.array.disk_color_keys);
         String[] diskColorStrings = getResources().getStringArray(R.array.disk_color_strings);
-        chosenDiskColors = new String[diskColorKeys.length];
+        String [] chosenDiskColors = new String[diskColorKeys.length];                       //all colors enabled in preferences
         int numChosen = 0;
         for (int i = 0; i < diskColorKeys.length; i++) {
             if (prefs.getBoolean(diskColorKeys[i], false)) {
@@ -114,8 +115,10 @@ public class GameActivity extends AppCompatActivity {
                 numChosen++;
             }
         }
-        if (numChosen == 0)
+        if (numChosen == 0) {
             chosenDiskColors = new String[]{"#20c996", "#6c8fd0", "#f4b710", "#b19cd9"};
+            numChosen = 4;
+        }
 
         //Load game state values from SharedPreferences and initialize GamePanel accordingly
         Gson gson = new Gson();
